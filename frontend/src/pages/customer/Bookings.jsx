@@ -63,7 +63,7 @@ export default function Bookings() {
             <label>Select Service</label>
             <select className="input-field" required value={newBooking.service_id} onChange={e=>setNewBooking({...newBooking, service_id: e.target.value})}>
               <option value="">-- Choose Service --</option>
-              {services.map(s => <option key={s.id} value={s.id}>{s.name} - INR {s.price}</option>)}
+              {services.map(s => <option key={s.id} value={s.id}>{s.name} - Est. INR {s.price}</option>)}
             </select>
           </div>
           <button className="btn btn-primary" style={{ width: '100%', marginTop: '1rem' }} type="submit">Book Appointment</button>
