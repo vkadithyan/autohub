@@ -42,7 +42,9 @@ export default function DashboardLayout({ rolename }) {
       {/* Sidebar Navigation */}
       <aside className="sidebar">
         <div className="sidebar-header">
-          <h2>AutoHub <span className="role-badge">{rolename}</span></h2>
+          <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <h2>AutoHub <span className="role-badge">{rolename}</span></h2>
+          </Link>
         </div>
         
         <nav className="sidebar-nav">

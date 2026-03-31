@@ -6,9 +6,11 @@ export default function Home() {
   return (
     <div className="landing-page">
       <nav className="navbar" style={{ position: 'relative' }}>
-        <h1 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0, color: 'var(--text-primary)' }}>
-          <Car style={{ color: 'var(--accent-color)' }} /> AutoHub
-        </h1>
+        <Link to="/" style={{ textDecoration: 'none' }}>
+          <h1 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0, color: 'var(--text-primary)' }}>
+            <Car style={{ color: 'var(--accent-color)' }} /> AutoHub
+          </h1>
+        </Link>
         <div className="nav-links">
           <Link to="/login" className="btn" style={{ background: 'var(--surface-color)', color: 'var(--text-primary)', border: '1px solid var(--border-color)' }}>Sign In</Link>
           <Link to="/register" className="btn btn-primary">Register Now</Link>
