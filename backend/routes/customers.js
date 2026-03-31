@@ -32,4 +32,23 @@ router.post('/', async (req, res) => {
     }
 });
 
+router.delete('/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        // Remove associated data to prevent foreign key constraint issues
+        await pool.execute('DELETE FROM bookings WHERE customer_id = ?', [id]);
+        await pool.execute('DELETE FROM vehicles WHERE customer_id = ?', [id]);
+        await pool.execute('DELETE FROM users WHERE reference_id = ? AND role = "customer"', [id]);
+        
+        const [result] = await pool.execute('DELETE FROM customers WHERE id = ?', [id]);
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ success: false, message: 'Customer not found' });
+        }
+        res.json({ success: true, message: 'Customer deleted successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
 export default router;

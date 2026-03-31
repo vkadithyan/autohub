@@ -32,4 +32,23 @@ router.post('/', async (req, res) => {
     }
 });
 
+router.delete('/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        // Unassign mechanic from active bookings
+        await pool.execute('UPDATE bookings SET mechanic_id = NULL WHERE mechanic_id = ?', [id]);
+        // Remove associated user login
+        await pool.execute('DELETE FROM users WHERE reference_id = ? AND role = "mechanic"', [id]);
+        
+        const [result] = await pool.execute('DELETE FROM mechanics WHERE id = ?', [id]);
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ success: false, message: 'Mechanic not found' });
+        }
+        res.json({ success: true, message: 'Mechanic deleted successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
 export default router;
