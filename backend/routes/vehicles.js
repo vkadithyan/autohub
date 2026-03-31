@@ -32,4 +32,17 @@ router.post('/', async (req, res) => {
     }
 });
 
+router.delete('/:id', async (req, res) => {
+    try {
+        const [result] = await pool.execute('DELETE FROM vehicles WHERE id = ?', [req.params.id]);
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ success: false, message: 'Vehicle not found' });
+        }
+        res.json({ success: true, message: 'Vehicle removed successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
 export default router;

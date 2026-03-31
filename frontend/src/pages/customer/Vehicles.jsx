@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '../../services/api';
-import { Car } from 'lucide-react';
+import { Car, Trash2 } from 'lucide-react';
 
 export default function Vehicles() {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -27,6 +27,14 @@ export default function Vehicles() {
     } catch (err) { alert('Failed to add vehicle'); }
   };
 
+  const handleRemoveVehicle = async (id) => {
+    if (!window.confirm('Are you sure you want to remove this vehicle?')) return;
+    try {
+      await api.delete(`/vehicles/${id}`);
+      fetchVehicles();
+    } catch (err) { alert('Failed to remove vehicle'); }
+  };
+
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'minmax(300px, 1fr) 2fr', gap: '2rem' }}>
       <div className="glass-panel">
@@ -49,15 +57,28 @@ export default function Vehicles() {
       </div>
 
       <div className="glass-panel">
-        <h3>My Garage Garage</h3>
+        <h3>My Garage</h3>
         <div className="table-container">
           <table>
-            <thead><tr><th>Make</th><th>Model</th><th>Year</th></tr></thead>
+            <thead><tr><th>Make</th><th>Model</th><th>Year</th><th style={{ textAlign: 'center' }}>Actions</th></tr></thead>
             <tbody>
               {vehicles.length === 0 ? (
-                <tr><td colSpan="3" style={{ textAlign: 'center' }}>No vehicles registered.</td></tr>
+                <tr><td colSpan="4" style={{ textAlign: 'center' }}>No vehicles registered.</td></tr>
               ) : vehicles.map(v => (
-                <tr key={v.id}><td>{v.make}</td><td>{v.model}</td><td>{v.year}</td></tr>
+                <tr key={v.id}>
+                  <td>{v.make}</td>
+                  <td>{v.model}</td>
+                  <td>{v.year}</td>
+                  <td style={{ textAlign: 'center' }}>
+                    <button 
+                      onClick={() => handleRemoveVehicle(v.id)}
+                      style={{ background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '0.2rem' }}
+                      title="Remove Vehicle"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </td>
+                </tr>
               ))}
             </tbody>
           </table>
